@@ -1,4 +1,5 @@
 const http = require('http'); // is a core node module used to create server
+const fs = require('fs');
 
 /**
  * this is used to create a local server. If you want to use web sockets yo can store this instance in a constant
@@ -17,11 +18,25 @@ const server = http.createServer((req, res) => {
   res.setHeader('Content-Type', 'text/html');
 
   // to know which information we gonna send, we use the 'write' method of 'res'
-  res.write('<head><link rel="stylesheet" href="#"></head>');
-  res.write('<h1>Hello, ninjas</h1>');
-  res.write('<p>Hello again, ninjas</p>');
+  // res.write('<head><link rel="stylesheet" href="#"></head>');
+  // res.write('<h1>Hello, ninjas</h1>');
+  // res.write('<p>Hello again, ninjas</p>');
   // then we need to end the response
-  res.end();
+  // res.end();
+
+  /** Send an html file
+   * To avoid all the steps above for the 'Content-Type'
+   * we can read a file in another folder where lay all our HTML.
+   */
+  fs.readFile('./views/index.html', (err, data) => {
+    if (err) {
+      console.log(err)
+    } else {
+      // We still should use the write method and end the write process
+      // res.write(data);
+      res.end(data); // if we just are writing one time we can use this to pass the data to write
+    }
+  });
 });
 
 /**
