@@ -26,6 +26,7 @@ const server = http.createServer((req, res) => {
 
   // figure out witch page is open using a switch statement
   let path = './views/';
+  // this is a basic routing but for a real app we may use the express framework which handle this in a better way
   switch (req.url) {
     case '/':
       path += 'index.html';
@@ -34,6 +35,13 @@ const server = http.createServer((req, res) => {
     case '/about':
       path += 'about.html';
       res.statusCode = 200;
+      break
+    case '/about-me': // we going to make a redirect to /about
+      res.statusCode = 301;
+      // We use the 'setHeader' method from 'res' object in order to make the redirection
+      res.setHeader('Location', '/about');
+      // We still need end the response
+      res.end();
       break
     default:
       path += '404.html';
