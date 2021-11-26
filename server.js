@@ -6,7 +6,22 @@ const http = require('http'); // is a core node module used to create server
  * This callback take 2 arguments: 'request' and 'response'
  */
 const server = http.createServer((req, res) => {
-  console.log('request made');
+  // the request object have a lot of information like the path/url and the method
+  console.log(req.url, req.method);
+
+  /**
+   * set header content type using the res argument.
+   * Here I can set the different type of content that I want.
+   * Like: 'text/plain', 'text/html', so on
+   */
+  res.setHeader('Content-Type', 'text/html');
+
+  // to know which information we gonna send, we use the 'write' method of 'res'
+  res.write('<head><link rel="stylesheet" href="#"></head>');
+  res.write('<h1>Hello, ninjas</h1>');
+  res.write('<p>Hello again, ninjas</p>');
+  // then we need to end the response
+  res.end();
 });
 
 /**
