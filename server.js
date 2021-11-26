@@ -24,11 +24,25 @@ const server = http.createServer((req, res) => {
   // then we need to end the response
   // res.end();
 
+  // figure out witch page is open using a switch statement
+  let path = './views/';
+  switch (req.url) {
+    case '/':
+      path += 'index.html';
+      break;
+    case '/about':
+      path += 'about.html';
+      break
+    default:
+      path += '404.html';
+      break;
+  }
+
   /** Send an html file
    * To avoid all the steps above for the 'Content-Type'
    * we can read a file in another folder where lay all our HTML.
    */
-  fs.readFile('./views/index.html', (err, data) => {
+  fs.readFile(path, (err, data) => {
     if (err) {
       console.log(err)
     } else {
