@@ -1,5 +1,6 @@
 const http = require('http'); // is a core node module used to create server
 const fs = require('fs');
+const _ = require('lodash');
 
 /**
  * this is used to create a local server. If you want to use web sockets yo can store this instance in a constant
@@ -7,8 +8,17 @@ const fs = require('fs');
  * This callback take 2 arguments: 'request' and 'response'
  */
 const server = http.createServer((req, res) => {
-  // the request object have a lot of information like the path/url and the method
-  console.log(req.url, req.method);
+  // lodash
+  const num = _.random(0, 20);
+  console.log(num);
+
+  // execute a function only once
+  const greet = _.once(() => {
+    console.log('Hello')
+  });
+
+  greet();
+  greet(); // this is not going to execute
 
   /**
    * set header content type using the res argument.
