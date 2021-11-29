@@ -15,5 +15,20 @@ app.listen(3000); // this also return an instance of the created server
 app.get('/', (req, res) => {
   // here we can set the Content-Type implicit usign 'send' method of response object
   // this method also set the status code
-  res.send('<p>Home page</p>');
+  // res.send('<p>Home page</p>');
+
+  /**
+   * for use directory to a response, we use the 'sendFile' method
+   * Which we pass the path for the file.
+   * However this path needs to be absolute. If we want to that path be
+   * relative, we need to indicate relative to what as a second argument.
+   *
+   * Another way is use the 'path' module which is a core module of node.
+   */
+  res.sendFile('./views/index.html', { root: __dirname });
+});
+
+app.get('/about', (req, res) => {
+  // res.send('<p>About page</p>');
+  res.sendFile('./views/about.html', { root: __dirname });
 });
