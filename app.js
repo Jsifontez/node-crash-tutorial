@@ -32,3 +32,18 @@ app.get('/about', (req, res) => {
   // res.send('<p>About page</p>');
   res.sendFile('./views/about.html', { root: __dirname });
 });
+
+// redirects
+app.get('/about-us', (req, res) => {
+  res.redirect('/about')
+});
+
+// 404 page
+// For redirect to a 404 page we use the method 'use' of express which use a sort of
+// middleware.
+// This work like a switch statement. Express goes from every get request
+// If is not a single match, then this use function is executed
+// fpr that reason this request need to be at the bottom
+app.use((req, res) => {
+  res.sendFile('./views/404.html', { root: __dirname });
+});
