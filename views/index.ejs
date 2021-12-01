@@ -4,10 +4,9 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blog Ninja</title>
+  <title>Blog Ninja | <%= title %> </title>
 </head>
 <body>
-
   <nav>
     <div>
       <a href="/"><h1>Blog Ninja</h1></a>
@@ -22,6 +21,16 @@
   
   <div class="blogs content">
     <h2>All blogs</h2>
+    <% if (blogs.length > 0) { %>
+      <% blogs.forEach(blog => { %>
+
+        <h3> <%= blog.title %> </h3>
+        <p> <%= blog.snippet %> </p>
+
+      <% }) %>
+    <% } else { %>
+      <p>There are no blogs to display...</p>
+    <% } %>
   </div>
 </body>
 </html>

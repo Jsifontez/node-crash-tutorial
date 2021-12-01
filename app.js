@@ -23,16 +23,23 @@ app.set('view engine', 'ejs');
  * We now will goin to render a view.
  */
 app.get('/', (req, res) => {
+  const blogs = [
+    {title: 'Yoshi finds eggs', snippet: 'Lorem ipsum dolor sit amet consectetur'},
+    {title: 'Mario finds stars', snippet: 'Lorem ipsum dolor sit amet consectetur'},
+    {title: 'How to defeat bowser', snippet: 'Lorem ipsum dolor sit amet consectetur'},
+  ];
+
   // here we going to tell how the view is called and his extension
-  res.render('index');
+  // We can pass data using and object with the name of the props to pass down with the second parameter
+  res.render('index', { title: 'Home', blogs });
 });
 
 app.get('/about', (req, res) => {
-  res.render('about');
+  res.render('about', { title: 'About' });
 });
 
 app.get('/blogs/create', (req, res) => {
-  res.render('create');
+  res.render('create', { title: 'Create new Blog' });
 })
 
 /**
@@ -44,5 +51,5 @@ app.get('/blogs/create', (req, res) => {
  * fpr that reason this request need to be at the bottom
  */
 app.use((req, res) => {
-  res.status(404).render('404');
+  res.status(404).render('404', { title: '404' });
 });
