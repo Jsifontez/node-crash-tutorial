@@ -19,6 +19,19 @@ app.set('view engine', 'ejs');
 // app.set('views', 'myviews');
 
 /**
+ * Every app.use or app.get is a middleware that executes in the server.
+ * The order of the functions matter because is the order of the execution
+ * of the middleware
+ */
+app.use((req, res, next) => {
+  console.log('new request made:');
+  console.log('host: ', req.hostname);
+  console.log('path: ', req.path);
+  console.log('method: ', req.method);
+  next(); // this a function to jump for the next middleware
+});
+
+/**
  * here instead of using a file with 'sendFile' method.
  * We now will goin to render a view.
  */
@@ -32,6 +45,11 @@ app.get('/', (req, res) => {
   // here we going to tell how the view is called and his extension
   // We can pass data using and object with the name of the props to pass down with the second parameter
   res.render('index', { title: 'Home', blogs });
+});
+
+app.use((req, res, next) => {
+  console.log('in the next middleware');
+  next(); // this a function to jump for the next middleware
 });
 
 app.get('/about', (req, res) => {
