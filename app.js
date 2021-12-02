@@ -4,9 +4,6 @@ const morgan = require('morgan');
 // express app
 const app = express();
 
-// listen for request. Same way that we do with 'http.createServer'
-app.listen(3000); // this also return an instance of the created server
-
 // register view engines. For inject dynamic data to the views
 // for that we use 'set' method which take two arguments.
 // 1st The name of the property
@@ -19,11 +16,17 @@ app.set('view engine', 'ejs');
  */
 // app.set('views', 'myviews');
 
+// listen for request. Same way that we do with 'http.createServer'
+app.listen(3000); // this also return an instance of the created server
+
+// middleware & static files
+
 /**
  * Every app.use or app.get is a middleware that executes in the server.
  * The order of the functions matter because is the order of the execution
  * of the middleware
  */
+app.use(express.static('public')); // this turn any file insidy that directory accesible from the front-end
 app.use(morgan('dev'));
 
 /**
