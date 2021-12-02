@@ -1,4 +1,5 @@
 const express = require('express');
+const morgan = require('morgan');
 
 // express app
 const app = express();
@@ -23,13 +24,7 @@ app.set('view engine', 'ejs');
  * The order of the functions matter because is the order of the execution
  * of the middleware
  */
-app.use((req, res, next) => {
-  console.log('new request made:');
-  console.log('host: ', req.hostname);
-  console.log('path: ', req.path);
-  console.log('method: ', req.method);
-  next(); // this a function to jump for the next middleware
-});
+app.use(morgan('dev'));
 
 /**
  * here instead of using a file with 'sendFile' method.
@@ -45,11 +40,6 @@ app.get('/', (req, res) => {
   // here we going to tell how the view is called and his extension
   // We can pass data using and object with the name of the props to pass down with the second parameter
   res.render('index', { title: 'Home', blogs });
-});
-
-app.use((req, res, next) => {
-  console.log('in the next middleware');
-  next(); // this a function to jump for the next middleware
 });
 
 app.get('/about', (req, res) => {
