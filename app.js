@@ -1,8 +1,19 @@
 const express = require('express');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
+const Blog = require('./models/blog');
 
 // express app
 const app = express();
+
+// connect to mongoDB
+const dbURI = 'mongodb+srv://netninja:test1234@cluster0.sej33.mongodb.net/node-tuts?retryWrites=true&w=majority';
+
+// to connect mongo with mongoose we use the 'connect' method of mongoose. Which is an asynchronous task
+// If we want to avoid the deprecated warning we pass an object as second argument with 'useNewUrlParser' and 'useUnifiedTopology' with a 'true' value
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then((result) => app.listen(3000)) // only listen the server after the connection of the db is made
+  .catch(error => console.log(error))
 
 // register view engines. For inject dynamic data to the views
 // for that we use 'set' method which take two arguments.
@@ -16,9 +27,6 @@ app.set('view engine', 'ejs');
  */
 // app.set('views', 'myviews');
 
-// listen for request. Same way that we do with 'http.createServer'
-app.listen(3000); // this also return an instance of the created server
-
 // middleware & static files
 
 /**
@@ -28,6 +36,45 @@ app.listen(3000); // this also return an instance of the created server
  */
 app.use(express.static('public')); // this turn any file insidy that directory accesible from the front-end
 app.use(morgan('dev'));
+
+// mongoose and mongo sanbox routes
+app.get('/add-blog', (req, res) => {
+  // create a new instance of the models
+  const blog = new Blog({
+    title: 'new blog 2',
+    snippet: 'about my new blog',
+    body: 'more about my new blog'
+  });
+
+  // a method of de new instace created. Is asynchronuos that return a promise
+  blog.save()
+    .then( result => {
+      res.send(result)
+    })
+    .catch( err => console.log(err))
+});
+
+app.get('/all-blogs', (req, res) => {
+  Blog.find()
+    .then(result => {
+      res.send(result);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+});
+
+app.get('/single-blog', (req, res) => {
+  Blog.findById('61aad9f20623f32d0dbfd2f6')
+    .then(result => {
+      res.send(result);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+})
+
+// Routes:
 
 /**
  * here instead of using a file with 'sendFile' method.
