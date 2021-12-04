@@ -37,43 +37,6 @@ app.set('view engine', 'ejs');
 app.use(express.static('public')); // this turn any file insidy that directory accesible from the front-end
 app.use(morgan('dev'));
 
-// mongoose and mongo sanbox routes
-app.get('/add-blog', (req, res) => {
-  // create a new instance of the models
-  const blog = new Blog({
-    title: 'new blog 2',
-    snippet: 'about my new blog',
-    body: 'more about my new blog'
-  });
-
-  // a method of de new instace created. Is asynchronuos that return a promise
-  blog.save()
-    .then( result => {
-      res.send(result)
-    })
-    .catch( err => console.log(err))
-});
-
-app.get('/all-blogs', (req, res) => {
-  Blog.find()
-    .then(result => {
-      res.send(result);
-    })
-    .catch(err => {
-      console.log(err);
-    })
-});
-
-app.get('/single-blog', (req, res) => {
-  Blog.findById('61aad9f20623f32d0dbfd2f6')
-    .then(result => {
-      res.send(result);
-    })
-    .catch(err => {
-      console.log(err);
-    })
-})
-
 // Routes:
 
 /**
@@ -81,20 +44,23 @@ app.get('/single-blog', (req, res) => {
  * We now will goin to render a view.
  */
 app.get('/', (req, res) => {
-  const blogs = [
-    {title: 'Yoshi finds eggs', snippet: 'Lorem ipsum dolor sit amet consectetur'},
-    {title: 'Mario finds stars', snippet: 'Lorem ipsum dolor sit amet consectetur'},
-    {title: 'How to defeat bowser', snippet: 'Lorem ipsum dolor sit amet consectetur'},
-  ];
-
-  // here we going to tell how the view is called and his extension
-  // We can pass data using and object with the name of the props to pass down with the second parameter
-  res.render('index', { title: 'Home', blogs });
+  res.redirect('/blogs');
 });
 
 app.get('/about', (req, res) => {
   res.render('about', { title: 'About' });
 });
+
+// blog routes
+app.get('/blogs', (req, res) => {
+  Blog.find().sort({ createdAt: -1 })
+    .then(result => {
+      res.render('index', { title: 'All blogs', blogs: result });
+    })
+    .catch(err => {
+      console.log(err);
+    })
+})
 
 app.get('/blogs/create', (req, res) => {
   res.render('create', { title: 'Create new Blog' });
