@@ -12,7 +12,10 @@ const dbURI = 'mongodb+srv://netninja:test1234@cluster0.sej33.mongodb.net/node-t
 // to connect mongo with mongoose we use the 'connect' method of mongoose. Which is an asynchronous task
 // If we want to avoid the deprecated warning we pass an object as second argument with 'useNewUrlParser' and 'useUnifiedTopology' with a 'true' value
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then((result) => app.listen(3000)) // only listen the server after the connection of the db is made
+  .then(result => {
+    app.listen(3000);
+    console.log('listening in port 3000');
+  }) // only listen the server after the connection of the db is made
   .catch(error => console.log(error))
 
 // register view engines. For inject dynamic data to the views
