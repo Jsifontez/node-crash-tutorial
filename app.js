@@ -89,6 +89,19 @@ app.get('/blogs/:id', (req, res) => {
     .catch(err => console.log(err))
 });
 
+app.delete('/blogs/:id', (req, res) => {
+  const id = req.params.id;
+  Blog.findByIdAndDelete(id)
+    .then(result => {
+      // when this method is used, we can't use the redirect method
+      // instead we need to pass some json with the redirect property
+      res.json({ redirect: '/blogs' });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
 app.get('/blogs/create', (req, res) => {
   res.render('create', { title: 'Create new Blog' });
 })
