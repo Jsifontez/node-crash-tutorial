@@ -35,6 +35,7 @@ app.set('view engine', 'ejs');
  * of the middleware
  */
 app.use(express.static('public')); // this turn any file insidy that directory accesible from the front-end
+app.use(express.urlencoded({ extended: true })); // this take all encoded data that come from the frontend (form) and turn into an object that we can use on the request object
 app.use(morgan('dev'));
 
 // Routes:
@@ -60,6 +61,19 @@ app.get('/blogs', (req, res) => {
     .catch(err => {
       console.log(err);
     })
+});
+
+app.post('/blogs', (req, res) => {
+  // before we save the data of the blog to mongodb
+  // we need create a new instance of a Blog first
+  const blog = new Blog(req.body)
+
+  // now we use the save method of mongodb
+  blog.save()
+    .then(result => {
+      res.redirect('/blogs');
+    })
+    .catch(err => consoe.log(err))
 })
 
 app.get('/blogs/create', (req, res) => {
