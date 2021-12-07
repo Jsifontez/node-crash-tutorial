@@ -1,13 +1,13 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const Blog = require('./models/blog');
+require('dotenv').config();
 
 // express app
 const app = express();
 
 // connect to mongoDB
-const dbURI = 'mongodb+srv://netninja:test1234@cluster0.sej33.mongodb.net/node-tuts?retryWrites=true&w=majority';
+const dbURI = process.env.MONGO_URI;
 
 // to connect mongo with mongoose we use the 'connect' method of mongoose. Which is an asynchronous task
 // If we want to avoid the deprecated warning we pass an object as second argument with 'useNewUrlParser' and 'useUnifiedTopology' with a 'true' value
