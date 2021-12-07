@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const blogRoutes = require('./routes/blogRoutes');
 require('dotenv').config();
 
 // express app
@@ -56,55 +57,7 @@ app.get('/about', (req, res) => {
 });
 
 // blog routes
-app.get('/blogs', (req, res) => {
-  Blog.find().sort({ createdAt: -1 })
-    .then(result => {
-      res.render('index', { title: 'All blogs', blogs: result });
-    })
-    .catch(err => {
-      console.log(err);
-    })
-});
-
-app.post('/blogs', (req, res) => {
-  // before we save the data of the blog to mongodb
-  // we need create a new instance of a Blog first
-  const blog = new Blog(req.body)
-
-  // now we use the save method of mongodb
-  blog.save()
-    .then(result => {
-      res.redirect('/blogs');
-    })
-    .catch(err => consoe.log(err))
-})
-
-app.get('/blogs/:id', (req, res) => {
-  const id = req.params.id; // we use 'req.params.whateverYouCallItInTheGetReq'
-  // Now we use the 'findById' method of mongoose
-  Blog.findById(id)
-    .then(result => {
-      res.render('details', { blog: result, title: 'Blog details' });
-    })
-    .catch(err => console.log(err))
-});
-
-app.delete('/blogs/:id', (req, res) => {
-  const id = req.params.id;
-  Blog.findByIdAndDelete(id)
-    .then(result => {
-      // when this method is used, we can't use the redirect method
-      // instead we need to pass some json with the redirect property
-      res.json({ redirect: '/blogs' });
-    })
-    .catch(err => {
-      console.log(err);
-    });
-});
-
-app.get('/blogs/create', (req, res) => {
-  res.render('create', { title: 'Create new Blog' });
-})
+app.use('/blogs', blogRoutes);
 
 /**
  * 404 page
